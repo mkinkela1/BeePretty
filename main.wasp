@@ -12,6 +12,11 @@ app BeePretty {
       },
       onAuthFailedRedirectTo: "/login"
     },
+    dependencies: [
+        ("@tailwindcss/forms", "^0.5.3"),
+        ("@tailwindcss/typography", "^0.5.7"),
+        ("@heroicons/react", "^2.0.16")
+    ]
 }
 
 route RootRoute { path: "/", to: MainPage }
@@ -21,27 +26,57 @@ page MainPage {
 
 route LoginRoute { path: "/login", to: LoginPage }
 page LoginPage {
-  component: import Login from "@client/LoginPage"
+  component: import Login from "@client/LoginPage.tsx"
 }
 
 route SignupRoute { path: "/signup", to: SignupPage }
 page SignupPage {
-  component: import SignUp from "@client/SignupPage"
+  component: import SignUp from "@client/SignupPage.tsx"
 }
 
 route ForgotPasswordRoute { path: "/forgot-password", to: ForgotPasswordPage }
 page ForgotPasswordPage {
-  component: import ForgotPassword from "@client/ForgotPasswordPage"
+  component: import ForgotPassword from "@client/ForgotPasswordPage.tsx"
 }
 
 route ResetPasswordRoute { path: "/reset-password", to: ResetPasswordPage }
 page ResetPasswordPage {
-  component: import ResetPassword from "@client/ResetPasswordPage"
+  component: import ResetPassword from "@client/ResetPasswordPage.tsx"
 }
 
 route VerifyEmailRoute { path: "/verify-email", to: VerifyEmailPage }
 page VerifyEmailPage {
-  component: import VerifyEmail from "@client/VerifyEmailPage"
+  component: import VerifyEmail from "@client/VerifyEmailPage.tsx"
+}
+
+route AuthenticatedMainRoute { path: "/app", to: AuthenticatedMainPage }
+page AuthenticatedMainPage {
+  authRequired: true,
+  component: import AuthenticatedMain from "@client/AuthenticatedMainPage.tsx"
+}
+
+route BattleArenaRoute { path: "/app/battle", to: BattleArenaPage }
+page BattleArenaPage {
+  authRequired: true,
+  component: import BattleArena from "@client/BattleArenaPage.tsx"
+}
+
+route ChatRoute { path: "/app/chat", to: ChatPage }
+page ChatPage {
+  authRequired: true,
+  component: import Chat from "@client/ChatPage.tsx"
+}
+
+route NotificationRoute { path: "/app/notification", to: NotificationPage }
+page NotificationPage {
+  authRequired: true,
+  component: import Notification from "@client/NotificationPage.tsx"
+}
+
+route ProfileRoute { path: "/app/me", to: ProfilePage }
+page ProfilePage {
+  authRequired: true,
+  component: import Profile from "@client/ProfilePage.tsx"
 }
 
 entity User {=psl
