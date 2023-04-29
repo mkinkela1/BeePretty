@@ -1,6 +1,9 @@
 import TopMenu from "./components/TopMenu";
+import useAuth from "@wasp/auth/useAuth";
 
 const ProfilePage = () => {
+  const { data: user } = useAuth();
+
   const posts = [
     "https://via.placeholder.com/300x300", // Replace with the actual post image sources
     "https://via.placeholder.com/300x300",
@@ -23,7 +26,7 @@ const ProfilePage = () => {
             className="w-20 h-20 rounded-full mr-4"
           />
           <div>
-            <h1 className="text-2xl font-bold">Username</h1>
+            <h1 className="text-2xl font-bold">{user?.username}</h1>
             <p className="text-gray-600">Bio or description</p>
           </div>
         </header>

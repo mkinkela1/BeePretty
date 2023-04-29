@@ -61,6 +61,12 @@ page BattleArenaPage {
   component: import BattleArena from "@client/BattleArenaPage.tsx"
 }
 
+route SearchRoute { path: "/app/search", to: SearchPage }
+page SearchPage {
+  authRequired: true,
+  component: import SearchPage from "@client/SearchPage.tsx"
+}
+
 route ChatRoute { path: "/app/chat", to: ChatPage }
 page ChatPage {
   authRequired: true,
@@ -84,6 +90,7 @@ entity User {=psl
     username    String  @unique
     password    String
     externalAuthAssociations  SocialLogin[]
+    userData    UserData?
 psl=}
 
 entity SocialLogin {=psl
@@ -95,5 +102,20 @@ entity SocialLogin {=psl
   createdAt   DateTime  @default(now())
   @@unique([provider, providerId, userId])
 psl=}
+
+entity UserData {=psl
+   id          Int     @id @default(autoincrement())
+   firstName   String
+   lastName    String
+   bio         String
+   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+   userId      Int
+   @@unique([userId])
+psl=}
+
+query getUsersByUsername {
+  fn: import { getUsersByUsername } from "@server/users/getUsersByUsername.js",
+  entities: [User]
+}
 
 
