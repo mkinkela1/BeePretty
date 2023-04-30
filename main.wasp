@@ -2,7 +2,13 @@ app BeePretty {
   wasp: {
     version: "^0.10.3"
   },
+  db: {
+    system: PostgreSQL
+  },
   title: "BeePretty",
+  head: [
+    "<meta name=\"referrer\" content=\"no-referrer\" />"
+  ],
   auth: {
       userEntity: User,
       externalAuthEntity: SocialLogin,
@@ -15,7 +21,8 @@ app BeePretty {
     dependencies: [
         ("@tailwindcss/forms", "^0.5.3"),
         ("@tailwindcss/typography", "^0.5.7"),
-        ("@heroicons/react", "^2.0.16")
+        ("@heroicons/react", "^2.0.16"),
+        ("form-data", "^4.0.0")
     ]
 }
 
@@ -86,11 +93,12 @@ page ProfilePage {
 }
 
 entity User {=psl
-    id          Int     @id @default(autoincrement())
-    username    String  @unique
-    password    String
+    id               Int     @id @default(autoincrement())
+    username         String  @unique
+    password         String
     externalAuthAssociations  SocialLogin[]
-    userData    UserData?
+    userData         UserData?
+    featuredImage    FeaturedImage?
 psl=}
 
 entity SocialLogin {=psl
@@ -105,9 +113,18 @@ psl=}
 
 entity UserData {=psl
    id          Int     @id @default(autoincrement())
-   firstName   String
-   lastName    String
-   bio         String
+   firstName   String?
+   lastName    String?
+   bio         String?
+   profilePic  String?
+   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+   userId      Int
+   @@unique([userId])
+psl=}
+
+entity FeaturedImage {=psl
+   id          Int     @id @default(autoincrement())
+   imageUrl    String?
    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
    userId      Int
    @@unique([userId])
@@ -116,6 +133,21 @@ psl=}
 query getUsersByUsername {
   fn: import { getUsersByUsername } from "@server/users/getUsersByUsername.js",
   entities: [User]
+}
+
+query getMe {
+  fn: import { getMe } from "@server/users/getMe.js",
+  entities: [User, UserData, FeaturedImage]
+}
+
+action uploadProfilePic {
+  fn: import { uploadProfilePic } from "@server/users/uploadProfilePic.js",
+  entities: [UserData]
+}
+
+action uploadFeaturedImage {
+  fn: import { uploadFeaturedImage } from "@server/users/uploadFeaturedImage.js",
+  entities: [FeaturedImage]
 }
 
 

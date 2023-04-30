@@ -3,7 +3,7 @@ import TopMenu from "./components/TopMenu";
 const BattleAreaPage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
-      <TopMenu />
+      <TopMenu/>
       <div className="max-w-screen-lg mx-auto p-4">
         <div className="flex">
           <div className="w-1/4 bg-gray-100 py-4 px-6">

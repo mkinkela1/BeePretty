@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react"
+import {useState} from "react"
 import TopMenu from "./components/TopMenu";
 import {useQuery} from "@wasp/queries";
 import getUsersByUsername from "@wasp/queries/getUsersByUsername";
@@ -11,7 +11,7 @@ interface IResult {
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const { data: usersData, isFetching, error } = useQuery<any,IResult[]>(getUsersByUsername, {search: searchQuery})
+  const {data: usersData, isFetching, error} = useQuery<any, IResult[]>(getUsersByUsername, {search: searchQuery})
 
   const usersList = usersData ?? []
 
@@ -19,7 +19,7 @@ const SearchPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <TopMenu />
+      <TopMenu/>
       <div className="max-w-screen-lg mx-auto p-4">
         <div className="flex items-center mb-4">
           <input

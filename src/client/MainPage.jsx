@@ -6,7 +6,7 @@ const MainPage = () => {
     <div className="container">
       <main>
         <div className="logo">
-          <img src={waspLogo} alt="wasp" />
+          <img src={waspLogo} alt="wasp"/>
         </div>
 
         <h2 className="welcome-title"> Welcome to Wasp - you just started a new app! </h2>

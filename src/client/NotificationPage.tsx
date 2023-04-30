@@ -35,7 +35,7 @@ const NotificationPage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <TopMenu />
+      <TopMenu/>
       <div className="max-w-screen-lg mx-auto p-4">
         {notifications.map((notification) => (
           <div

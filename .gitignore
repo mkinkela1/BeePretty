@@ -134,3 +134,7 @@ dist
 /.env.server
 /.env.client
 >>>>>>> 2cb9673 (Init wasp)
+
+package.json
+tsconfig.json
+tsconfig.node.json
