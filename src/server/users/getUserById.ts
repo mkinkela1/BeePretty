@@ -15,7 +15,9 @@ export const getUserById = async ({ userId }: IArgs, context: any) => {
     },
     include: {
       userData: true,
-      featuredImage: true
+      featuredImage: true,
+      following: true,
+      followedBy: true
     }
   });
 };

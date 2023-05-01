@@ -1,7 +1,10 @@
 import TopMenu from "./components/TopMenu";
-import { UserPlusIcon } from "@heroicons/react/24/outline";
+import { UserMinusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@wasp/queries";
 import getUserById from "@wasp/queries/getUserById";
+import followUser from "@wasp/actions/followUser";
+import unfollowUser from "@wasp/actions/unfollowUser";
+import useAuth from "@wasp/auth/useAuth";
 
 interface IRouteParams {
   match: { params: { id: number } };
@@ -20,6 +23,8 @@ interface IResult {
   featuredImage: {
     imageUrl: string;
   };
+  following: { followerId: number; followingId: number }[];
+  followedBy: { followerId: number; followingId: number }[];
 }
 
 const UserProfilePage = ({
@@ -27,18 +32,42 @@ const UserProfilePage = ({
     params: { id }
   }
 }: IRouteParams) => {
+  const { data: me } = useAuth();
   const {
     data: user,
     isFetching,
     error
   } = useQuery<any, IResult>(getUserById, {
-    userId: id
+    userId: +id
   });
 
   const getFullName = () =>
     `${user?.userData?.firstName ?? "John"} ${
       user?.userData?.lastName ?? "Doe"
     }`;
+
+  const alreadyFollowing = () => {
+    const followers =
+      user?.followedBy?.filter(({ followerId }) => followerId === me?.id) ?? [];
+
+    return followers.length > 0;
+  };
+
+  const handleFollow = async () => {
+    try {
+      await followUser({ userId: +id });
+    } catch {
+      console.error("Follow not successfull");
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      await unfollowUser({ userId: +id });
+    } catch {
+      console.error("Follow not successfull");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -59,10 +88,36 @@ const UserProfilePage = ({
             <div>
               <h1 className="text-2xl font-bold">{getFullName()}</h1>
               <p className="text-gray-600">{user?.userData?.bio}</p>
-              <div className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none">
-                <UserPlusIcon className="h-5 w-5" />
-                <span>Follow</span>
+              <div className="flex gap-2">
+                <div>
+                  <strong>Posts: </strong> {0}
+                </div>
+                <div>
+                  <strong>Following: </strong>
+                  {user?.following?.length ?? 0}
+                </div>
+                <div>
+                  <strong>Followers: </strong>
+                  {user?.followedBy?.length ?? 0}
+                </div>
               </div>
+              {alreadyFollowing() ? (
+                <div
+                  onClick={handleUnfollow}
+                  className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                >
+                  <UserMinusIcon className="h-5 w-5" />
+                  <span>Unfollow</span>
+                </div>
+              ) : (
+                <div
+                  onClick={handleFollow}
+                  className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                >
+                  <UserPlusIcon className="h-5 w-5" />
+                  <span>Follow</span>
+                </div>
+              )}
             </div>
           </header>
         </div>

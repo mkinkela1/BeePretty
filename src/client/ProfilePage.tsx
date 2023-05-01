@@ -15,6 +15,8 @@ interface IGetMe {
     userId: number;
     profilePic: string;
   };
+  following: { followerId: number; followingId: number }[];
+  followedBy: { followerId: number; followingId: number }[];
 }
 
 const ProfilePage = () => {
@@ -107,28 +109,41 @@ const ProfilePage = () => {
             <div>
               <h1 className="text-2xl font-bold">{getFullName()}</h1>
               <p className="text-gray-600">{user?.userData?.bio}</p>
+              <div className="flex gap-2">
+                <div>
+                  <strong>Posts: </strong> {0}
+                </div>
+                <div>
+                  <strong>Following: </strong>
+                  {user?.following?.length ?? 0}
+                </div>
+                <div>
+                  <strong>Followers: </strong>
+                  {user?.followedBy?.length ?? 0}
+                </div>
+              </div>
+              <div className="flex gap-2 py-4">
+                <label htmlFor="uploadFeaturedImage">
+                  <div className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none">
+                    <TrophyIcon className="h-5 w-5" />
+                    <span>Upload featured image</span>
+                  </div>
+                </label>
+                <input
+                  type="file"
+                  id="uploadFeaturedImage"
+                  className="hidden"
+                  accept="image/png, image/jpeg, image/jpg"
+                  onChange={(e: any) => handleUpload(e, false)}
+                />
+                {/*<Button*/}
+                {/*  label="Upload new image"*/}
+                {/*  onClick={console.log}*/}
+                {/*  icon={<PhotoIcon className="h-5 w-5" />}*/}
+                {/*/>*/}
+              </div>
             </div>
           </header>
-        </div>
-        <div className="flex gap-2 py-4">
-          <label htmlFor="uploadFeaturedImage">
-            <div className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none">
-              <TrophyIcon className="h-5 w-5" />
-              <span>Upload featured image</span>
-            </div>
-          </label>
-          <input
-            type="file"
-            id="uploadFeaturedImage"
-            className="hidden"
-            accept="image/png, image/jpeg, image/jpg"
-            onChange={(e: any) => handleUpload(e, false)}
-          />
-          {/*<Button*/}
-          {/*  label="Upload new image"*/}
-          {/*  onClick={console.log}*/}
-          {/*  icon={<PhotoIcon className="h-5 w-5" />}*/}
-          {/*/>*/}
         </div>
         <div className="grid grid-cols-3 gap-4">
           {user?.featuredImage?.imageUrl && (

@@ -3,7 +3,10 @@ app BeePretty {
     version: "^0.10.3"
   },
   db: {
-    system: PostgreSQL
+    system: PostgreSQL,
+    seeds: [
+      import { devSeed } from "@server/devSeed.js",
+    ]
   },
   title: "BeePretty",
   head: [
@@ -22,7 +25,8 @@ app BeePretty {
         ("@tailwindcss/forms", "^0.5.3"),
         ("@tailwindcss/typography", "^0.5.7"),
         ("@heroicons/react", "^2.0.16"),
-        ("form-data", "^4.0.0")
+        ("form-data", "^4.0.0"),
+        ("@faker-js/faker", "^7.6.0")
     ]
 }
 
@@ -105,6 +109,17 @@ entity User {=psl
     externalAuthAssociations  SocialLogin[]
     userData         UserData?
     featuredImage    FeaturedImage?
+    followedBy Follows[] @relation("following")
+    following  Follows[] @relation("follower")
+psl=}
+
+entity Follows {=psl
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 psl=}
 
 entity SocialLogin {=psl
@@ -143,12 +158,12 @@ query findUsers {
 
 query getMe {
   fn: import { getMe } from "@server/users/getMe.js",
-  entities: [User, UserData, FeaturedImage]
+  entities: [User, UserData, FeaturedImage, Follows]
 }
 
 query getUserById {
   fn: import { getUserById } from "@server/users/getUserById.js",
-  entities: [User, UserData, FeaturedImage]
+  entities: [User, UserData, FeaturedImage, Follows]
 }
 
 action uploadProfilePic {
@@ -159,6 +174,16 @@ action uploadProfilePic {
 action uploadFeaturedImage {
   fn: import { uploadFeaturedImage } from "@server/users/uploadFeaturedImage.js",
   entities: [FeaturedImage]
+}
+
+action followUser {
+  fn: import { followUser } from "@server/users/followUser.js",
+  entities: [Follows]
+}
+
+action unfollowUser {
+  fn: import { unfollowUser } from "@server/users/unfollowUser.js",
+  entities: [Follows]
 }
 
 

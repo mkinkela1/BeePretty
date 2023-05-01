@@ -22,7 +22,13 @@ export const findUsers = async ({ search }: IArgs, context: any) => {
       ]
     },
     include: {
-      user: true
+      user: {
+        select: {
+          id: true,
+          following: true,
+          followedBy: true
+        }
+      }
     }
   });
 };

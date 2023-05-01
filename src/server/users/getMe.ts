@@ -11,7 +11,9 @@ export const getMe = async (args: any, context: any) => {
     },
     include: {
       userData: true,
-      featuredImage: true
+      featuredImage: true,
+      following: true,
+      followedBy: true
     }
   });
 };
