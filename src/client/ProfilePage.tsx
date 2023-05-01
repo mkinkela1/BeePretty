@@ -1,9 +1,11 @@
 import TopMenu from "./components/TopMenu";
 import { useQuery } from "@wasp/queries";
 import getMe from "@wasp/queries/getMe";
-import { PlusIcon, TrophyIcon } from "@heroicons/react/24/outline";
+import { PhotoIcon, PlusIcon, TrophyIcon } from "@heroicons/react/24/outline";
 import uploadProfilePic from "@wasp/actions/uploadProfilePic";
 import uploadFeaturedImage from "@wasp/actions/uploadFeaturedImage";
+import { useState } from "react";
+import UploadPostModal from "./components/UploadPostModal";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -17,26 +19,26 @@ interface IGetMe {
   };
   following: { followerId: number; followingId: number }[];
   followedBy: { followerId: number; followingId: number }[];
+  posts: {
+    id: number;
+    title: string;
+    imgUrl: string;
+  }[];
 }
 
 const ProfilePage = () => {
-  const { data: user, isFetching, error } = useQuery<any, IGetMe>(getMe);
+  const {
+    data: user,
+    isFetching,
+    error,
+    refetch
+  } = useQuery<any, IGetMe>(getMe);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const getFullName = () =>
     `${user?.userData?.firstName ?? "John"} ${
       user?.userData?.lastName ?? "Doe"
     }`;
-
-  const posts = [
-    "https://via.placeholder.com/300x300", // Replace with the actual post image sources
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x300",
-    "https://via.placeholder.com/300x300"
-    // Add more post image sources
-  ];
 
   const handleUpload = async (e: any, isProfilePic: boolean) => {
     e.preventDefault();
@@ -126,7 +128,7 @@ const ProfilePage = () => {
                 <label htmlFor="uploadFeaturedImage">
                   <div className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none">
                     <TrophyIcon className="h-5 w-5" />
-                    <span>Upload featured image</span>
+                    <span>Featured image</span>
                   </div>
                 </label>
                 <input
@@ -136,11 +138,13 @@ const ProfilePage = () => {
                   accept="image/png, image/jpeg, image/jpg"
                   onChange={(e: any) => handleUpload(e, false)}
                 />
-                {/*<Button*/}
-                {/*  label="Upload new image"*/}
-                {/*  onClick={console.log}*/}
-                {/*  icon={<PhotoIcon className="h-5 w-5" />}*/}
-                {/*/>*/}
+                <div
+                  onClick={() => setShowModal(true)}
+                  className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                >
+                  <PhotoIcon className="h-5 w-5" />
+                  <span>New post</span>
+                </div>
               </div>
             </div>
           </header>
@@ -153,16 +157,21 @@ const ProfilePage = () => {
               className="h-48 w-full rounded-lg border-4 border-primary object-cover"
             />
           )}
-          {posts.map((post, index) => (
+          {user?.posts.map(({ id, imgUrl, title }) => (
             <img
-              key={index}
-              src={post}
-              alt={`Post ${index + 1}`}
+              key={id}
+              src={imgUrl}
+              alt={title}
               className="h-48 w-full rounded-lg object-cover"
             />
           ))}
         </div>
       </div>
+      <UploadPostModal
+        dependencyReload={refetch}
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+      />
     </div>
   );
 };

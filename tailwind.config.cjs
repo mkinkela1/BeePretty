@@ -9,7 +9,8 @@ module.exports = {
       primary: "#ffcc00",
       white: "#fff",
       gray: {
-        100: "#efefef"
+        100: "#efefef",
+        900: "#222"
       }
     }
   },

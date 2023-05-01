@@ -109,8 +109,17 @@ entity User {=psl
     externalAuthAssociations  SocialLogin[]
     userData         UserData?
     featuredImage    FeaturedImage?
-    followedBy Follows[] @relation("following")
-    following  Follows[] @relation("follower")
+    followedBy       Follows[] @relation("following")
+    following        Follows[] @relation("follower")
+    posts            Post[]
+psl=}
+
+entity Post {=psl
+    id          Int     @id @default(autoincrement())
+    title       String
+    imgUrl      String
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      Int
 psl=}
 
 entity Follows {=psl
@@ -166,6 +175,11 @@ query getUserById {
   entities: [User, UserData, FeaturedImage, Follows]
 }
 
+query getPosts {
+  fn: import { getPosts } from "@server/posts/getPosts.js",
+  entities: [User, Follows, Post]
+}
+
 action uploadProfilePic {
   fn: import { uploadProfilePic } from "@server/users/uploadProfilePic.js",
   entities: [UserData]
@@ -184,6 +198,11 @@ action followUser {
 action unfollowUser {
   fn: import { unfollowUser } from "@server/users/unfollowUser.js",
   entities: [Follows]
+}
+
+action createPost {
+  fn: import { createPost } from "@server/posts/createPost.js",
+  entities: [Post]
 }
 
 

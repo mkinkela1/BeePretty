@@ -13,7 +13,8 @@ export const getMe = async (args: any, context: any) => {
       userData: true,
       featuredImage: true,
       following: true,
-      followedBy: true
+      followedBy: true,
+      posts: true
     }
   });
 };
