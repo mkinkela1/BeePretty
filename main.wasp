@@ -92,6 +92,12 @@ page ProfilePage {
   component: import Profile from "@client/ProfilePage.tsx"
 }
 
+route UserProfileRoute { path: "/app/user/:id", to: UserProfilePage }
+page UserProfilePage {
+  authRequired: true,
+  component: import UserProfilePage from "@client/UserProfilePage.tsx"
+}
+
 entity User {=psl
     id               Int     @id @default(autoincrement())
     username         String  @unique
@@ -130,13 +136,18 @@ entity FeaturedImage {=psl
    @@unique([userId])
 psl=}
 
-query getUsersByUsername {
-  fn: import { getUsersByUsername } from "@server/users/getUsersByUsername.js",
-  entities: [User]
+query findUsers {
+  fn: import { findUsers } from "@server/users/findUsers.js",
+  entities: [User, UserData]
 }
 
 query getMe {
   fn: import { getMe } from "@server/users/getMe.js",
+  entities: [User, UserData, FeaturedImage]
+}
+
+query getUserById {
+  fn: import { getUserById } from "@server/users/getUserById.js",
   entities: [User, UserData, FeaturedImage]
 }
 
