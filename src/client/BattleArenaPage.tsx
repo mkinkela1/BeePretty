@@ -1,37 +1,97 @@
 import TopMenu from "./components/TopMenu";
+import { useQuery } from "@wasp/queries";
+import getRandomChallenge from "@wasp/queries/getRandomChallenge";
+import createVote from "@wasp/actions/createVote";
 
-const BattleAreaPage = () => {
-  return (
-    <div className="bg-gray-100 min-h-screen">
-      <TopMenu/>
-      <div className="max-w-screen-lg mx-auto">
-        <div className="flex sm:flex-col md:flex-col lg:flex-row justify-center sm:items-center md:items-center">
-          <div className="lg:w-1/2 p-4">
-            <div className="relative aspect-w-1 aspect-h-1">
-              <div className="inset-0 rounded-lg overflow-hidden">
-                <img
-                  src="https://via.placeholder.com/500x500" // Replace with the actual image source
-                  alt="Contestant 1"
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            </div>
-          </div>
-          <div className="lg:w-1/2 p-4">
-            <div className="relative aspect-w-1 aspect-h-1">
-              <div className="inset-0 rounded-lg overflow-hidden">
-                <img
-                  src="https://via.placeholder.com/500x500" // Replace with the actual image source
-                  alt="Contestant 2"
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+interface IResult {
+  C_id: number;
+  U1_id: number;
+  U2_id: number;
+  FI1_image: string;
+  FI2_image: string;
 }
 
-export default BattleAreaPage
+interface IVote {
+  challengeId?: number;
+  voteForId?: number;
+}
+
+const BattleAreaPage = () => {
+  const {
+    data: challengeData,
+    isFetching,
+    error,
+    refetch
+  } = useQuery<any, IResult[]>(getRandomChallenge);
+
+  const challenge = challengeData?.[0];
+
+  const handleVote = async ({ challengeId, voteForId }: IVote) => {
+    try {
+      await createVote({ challengeId, voteForId });
+      refetch();
+    } catch {
+      console.error("Vote not registered");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      <TopMenu />
+      <div className="mx-auto max-w-screen-lg">
+        {challenge ? (
+          <div className="flex justify-center sm:flex-col sm:items-center md:flex-col md:items-center lg:flex-row">
+            <div className="p-4 lg:w-1/2">
+              <div className="relative">
+                <div
+                  className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
+                  onClick={() =>
+                    handleVote({
+                      challengeId: challenge?.C_id,
+                      voteForId: challenge?.U1_id
+                    })
+                  }
+                >
+                  <img
+                    src={
+                      challenge?.FI1_image ??
+                      "https://via.placeholder.com/500x500"
+                    }
+                    alt="Contestant 1"
+                    className="h-full w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="p-4 lg:w-1/2">
+              <div className="relative">
+                <div
+                  className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
+                  onClick={() =>
+                    handleVote({
+                      challengeId: challenge?.C_id,
+                      voteForId: challenge?.U2_id
+                    })
+                  }
+                >
+                  <img
+                    src={
+                      challenge?.FI2_image ??
+                      "https://via.placeholder.com/500x500"
+                    }
+                    alt="Contestant 2"
+                    className="h-full w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          "There are no challanges left"
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BattleAreaPage;

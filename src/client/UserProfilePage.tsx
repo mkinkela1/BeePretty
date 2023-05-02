@@ -1,10 +1,15 @@
 import TopMenu from "./components/TopMenu";
-import { UserMinusIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import {
+  TrophyIcon,
+  UserMinusIcon,
+  UserPlusIcon
+} from "@heroicons/react/24/outline";
 import { useQuery } from "@wasp/queries";
 import getUserById from "@wasp/queries/getUserById";
 import followUser from "@wasp/actions/followUser";
 import unfollowUser from "@wasp/actions/unfollowUser";
 import useAuth from "@wasp/auth/useAuth";
+import createChallenge from "@wasp/actions/createChallenge";
 
 interface IRouteParams {
   match: { params: { id: number } };
@@ -25,6 +30,7 @@ interface IResult {
   };
   following: { followerId: number; followingId: number }[];
   followedBy: { followerId: number; followingId: number }[];
+  challenger: { challengedById: number; challengerId: number }[];
 }
 
 const UserProfilePage = ({
@@ -53,6 +59,15 @@ const UserProfilePage = ({
     return followers.length > 0;
   };
 
+  const alreadyChallenged = () => {
+    const challenges =
+      user?.challenger?.filter(
+        ({ challengedById }) => challengedById === me?.id
+      ) ?? [];
+
+    return challenges.length > 0;
+  };
+
   const handleFollow = async () => {
     try {
       await followUser({ userId: +id });
@@ -66,6 +81,14 @@ const UserProfilePage = ({
       await unfollowUser({ userId: +id });
     } catch {
       console.error("Follow not successfull");
+    }
+  };
+
+  const handleChallenge = async () => {
+    try {
+      await createChallenge({ userId: +id });
+    } catch {
+      console.error("User challenged");
     }
   };
 
@@ -101,23 +124,39 @@ const UserProfilePage = ({
                   {user?.followedBy?.length ?? 0}
                 </div>
               </div>
-              {alreadyFollowing() ? (
-                <div
-                  onClick={handleUnfollow}
-                  className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
-                >
-                  <UserMinusIcon className="h-5 w-5" />
-                  <span>Unfollow</span>
-                </div>
-              ) : (
-                <div
-                  onClick={handleFollow}
-                  className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
-                >
-                  <UserPlusIcon className="h-5 w-5" />
-                  <span>Follow</span>
-                </div>
-              )}
+              <div className="flex flex-row gap-2">
+                {alreadyFollowing() ? (
+                  <div
+                    onClick={handleUnfollow}
+                    className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                  >
+                    <UserMinusIcon className="h-5 w-5" />
+                    <span>Unfollow</span>
+                  </div>
+                ) : (
+                  <div
+                    onClick={handleFollow}
+                    className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                  >
+                    <UserPlusIcon className="h-5 w-5" />
+                    <span>Follow</span>
+                  </div>
+                )}
+                {alreadyChallenged() ? (
+                  <div className="text-black flex items-center justify-center space-x-2 rounded-md bg-gray-100 px-4 py-2 focus:outline-none">
+                    <TrophyIcon className="h-5 w-5" />
+                    <span>Challenge in progress</span>
+                  </div>
+                ) : (
+                  <div
+                    onClick={handleChallenge}
+                    className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+                  >
+                    <TrophyIcon className="h-5 w-5" />
+                    <span>Challenge</span>
+                  </div>
+                )}
+              </div>
             </div>
           </header>
         </div>

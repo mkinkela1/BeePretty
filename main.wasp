@@ -111,7 +111,31 @@ entity User {=psl
     featuredImage    FeaturedImage?
     followedBy       Follows[] @relation("following")
     following        Follows[] @relation("follower")
+    challengedBy     Challenge[] @relation("challengedBy")
+    challenger       Challenge[] @relation("challenger")
     posts            Post[]
+    challengeVote    ChallengeVote[]
+psl=}
+
+entity Challenge {=psl
+  id               Int     @id @default(autoincrement())
+  challengedBy     User    @relation("challengedBy", fields: [challengedById], references: [id])
+  challengedById   Int
+  challenger       User    @relation("challenger", fields: [challengerId], references: [id])
+  challengerId     Int
+  votes            ChallengeVote[]
+
+  @@unique([challengedById, challengerId])
+psl=}
+
+entity ChallengeVote {=psl
+    id               Int     @id @default(autoincrement())
+    user             User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId           Int
+    challenge        Challenge @relation(fields: [challengeId], references: [id])
+    challengeId      Int
+    voteForId        Int
+    @@unique([userId, challengeId])
 psl=}
 
 entity Post {=psl
@@ -180,6 +204,11 @@ query getPosts {
   entities: [User, Follows, Post]
 }
 
+query getRandomChallenge {
+  fn: import { getRandomChallenge } from "@server/challenges/getRandomChallenge.js",
+  entities: [User, FeaturedImage, Challenge]
+}
+
 action uploadProfilePic {
   fn: import { uploadProfilePic } from "@server/users/uploadProfilePic.js",
   entities: [UserData]
@@ -203,6 +232,16 @@ action unfollowUser {
 action createPost {
   fn: import { createPost } from "@server/posts/createPost.js",
   entities: [Post]
+}
+
+action createChallenge {
+  fn: import { createChallenge } from "@server/challenges/createChallenge.js",
+  entities: [Challenge]
+}
+
+action createVote {
+  fn: import { createVote } from "@server/challenges/createVote.js",
+  entities: [ChallengeVote]
 }
 
 
