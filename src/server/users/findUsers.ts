@@ -11,12 +11,14 @@ export const findUsers = async ({ search }: IArgs, context: any) => {
       OR: [
         {
           firstName: {
-            contains: search
+            contains: search,
+            mode: "insensitive"
           }
         },
         {
           lastName: {
-            contains: search
+            contains: search,
+            mode: "insensitive"
           }
         }
       ]

@@ -1,7 +1,7 @@
-import TopMenu from "./components/TopMenu";
 import { useQuery } from "@wasp/queries";
 import getRandomChallenge from "@wasp/queries/getRandomChallenge";
 import createVote from "@wasp/actions/createVote";
+import { withPage } from "./components/withPage";
 
 interface IResult {
   C_id: number;
@@ -36,62 +36,59 @@ const BattleAreaPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <TopMenu />
-      <div className="mx-auto max-w-screen-lg">
-        {challenge ? (
-          <div className="flex justify-center sm:flex-col sm:items-center md:flex-col md:items-center lg:flex-row">
-            <div className="p-4 lg:w-1/2">
-              <div className="relative">
-                <div
-                  className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
-                  onClick={() =>
-                    handleVote({
-                      challengeId: challenge?.C_id,
-                      voteForId: challenge?.U1_id
-                    })
+    <>
+      {challenge ? (
+        <div className="flex justify-center sm:flex-col sm:items-center md:flex-col md:items-center lg:flex-row">
+          <div className="p-4 lg:w-1/2">
+            <div className="relative">
+              <div
+                className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
+                onClick={() =>
+                  handleVote({
+                    challengeId: challenge?.C_id,
+                    voteForId: challenge?.U1_id
+                  })
+                }
+              >
+                <img
+                  src={
+                    challenge?.FI1_image ??
+                    "https://via.placeholder.com/500x500"
                   }
-                >
-                  <img
-                    src={
-                      challenge?.FI1_image ??
-                      "https://via.placeholder.com/500x500"
-                    }
-                    alt="Contestant 1"
-                    className="h-full w-full"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="p-4 lg:w-1/2">
-              <div className="relative">
-                <div
-                  className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
-                  onClick={() =>
-                    handleVote({
-                      challengeId: challenge?.C_id,
-                      voteForId: challenge?.U2_id
-                    })
-                  }
-                >
-                  <img
-                    src={
-                      challenge?.FI2_image ??
-                      "https://via.placeholder.com/500x500"
-                    }
-                    alt="Contestant 2"
-                    className="h-full w-full"
-                  />
-                </div>
+                  alt="Contestant 1"
+                  className="h-full w-full"
+                />
               </div>
             </div>
           </div>
-        ) : (
-          "There are no challanges left"
-        )}
-      </div>
-    </div>
+          <div className="p-4 lg:w-1/2">
+            <div className="relative">
+              <div
+                className="inset-0 overflow-hidden rounded-lg border-4 border-primary"
+                onClick={() =>
+                  handleVote({
+                    challengeId: challenge?.C_id,
+                    voteForId: challenge?.U2_id
+                  })
+                }
+              >
+                <img
+                  src={
+                    challenge?.FI2_image ??
+                    "https://via.placeholder.com/500x500"
+                  }
+                  alt="Contestant 2"
+                  className="h-full w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        "There are no challanges left"
+      )}
+    </>
   );
 };
 
-export default BattleAreaPage;
+export default withPage(BattleAreaPage);

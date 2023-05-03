@@ -1,8 +1,9 @@
-import TopMenu from "./components/TopMenu";
 import { useQuery } from "@wasp/queries";
 import getPosts from "@wasp/queries/getPosts";
 import useAuth from "@wasp/auth/useAuth";
 import { Post } from "./components/Post";
+import { withPage } from "./components/withPage";
+import React from "react";
 
 interface IPost {
   id: number;
@@ -21,15 +22,12 @@ const AuthenticatedMainPage = () => {
   const { data: posts } = useQuery<any, IPost[]>(getPosts);
 
   return (
-    <div className="bg-gray-100">
-      <TopMenu />
-      <div className="mx-auto max-w-screen-md p-4">
-        {posts?.map((post: IPost) => (
-          <Post {...post} myId={me?.id ?? 0} />
-        ))}
-      </div>
-    </div>
+    <>
+      {posts?.map((post: IPost) => (
+        <Post {...post} myId={me?.id ?? 0} />
+      ))}
+    </>
   );
 };
 
-export default AuthenticatedMainPage;
+export default withPage(AuthenticatedMainPage);
