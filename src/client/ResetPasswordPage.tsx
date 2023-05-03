@@ -1,11 +1,11 @@
-import {ResetPasswordForm} from '@wasp/auth/forms/ResetPassword'
+import { ResetPasswordForm } from "@wasp/auth/forms/ResetPassword";
 
 const ResetPasswordPage = () => {
   return (
     <>
-      <ResetPasswordForm/>
+      <ResetPasswordForm />
     </>
-  )
-}
+  );
+};
 
-export default ResetPasswordPage
+export default ResetPasswordPage;

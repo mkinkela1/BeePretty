@@ -6,20 +6,20 @@ const NotificationPage = () => {
       id: "1",
       message: "You have a new follower",
       time: "2 hours ago",
-      read: false,
+      read: false
     },
     {
       id: "2",
       message: "Your post has been liked",
       time: "5 hours ago",
-      read: true,
+      read: true
     },
     {
       id: "3",
       message: "You have been challenged to a game",
       time: "10 hours ago",
-      read: false,
-    },
+      read: false
+    }
     // Add more notifications
   ];
 
@@ -34,14 +34,14 @@ const NotificationPage = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <TopMenu/>
-      <div className="max-w-screen-lg mx-auto p-4">
+    <div className="min-h-screen bg-gray-100">
+      <TopMenu />
+      <div className="mx-auto max-w-screen-lg p-4">
         {notifications.map((notification) => (
           <div
             key={notification.id}
-            className={`bg-white rounded-lg p-4 mb-4 ${
-              notification.read ? "" : "border border-blue-500"
+            className={`mb-4 rounded-lg bg-white p-4 ${
+              notification.read ? "" : "border-blue-500 border"
             }`}
           >
             <p>{notification.message}</p>
@@ -49,13 +49,13 @@ const NotificationPage = () => {
             {notification.message === "You have been challenged to a game" && (
               <div className="mt-4">
                 <button
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2"
+                  className="bg-green-500 hover:bg-green-600 mr-2 rounded px-4 py-2 font-bold text-white"
                   onClick={() => handleAcceptChallenge(notification.id)}
                 >
                   Accept
                 </button>
                 <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                  className="bg-red-500 hover:bg-red-600 rounded px-4 py-2 font-bold text-white"
                   onClick={() => handleDeclineChallenge(notification.id)}
                 >
                   Decline
@@ -66,7 +66,7 @@ const NotificationPage = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NotificationPage
+export default NotificationPage;

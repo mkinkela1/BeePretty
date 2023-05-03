@@ -78,12 +78,6 @@ page SearchPage {
   component: import SearchPage from "@client/SearchPage.tsx"
 }
 
-route ChatRoute { path: "/app/chat", to: ChatPage }
-page ChatPage {
-  authRequired: true,
-  component: import Chat from "@client/ChatPage.tsx"
-}
-
 route NotificationRoute { path: "/app/notification", to: NotificationPage }
 page NotificationPage {
   authRequired: true,
@@ -115,6 +109,7 @@ entity User {=psl
     challenger       Challenge[] @relation("challenger")
     posts            Post[]
     challengeVote    ChallengeVote[]
+    likes            Like[]
 psl=}
 
 entity Challenge {=psl
@@ -144,6 +139,15 @@ entity Post {=psl
     imgUrl      String
     user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      Int
+    likes       Like[]
+psl=}
+
+entity Like {=psl
+    id          Int     @id @default(autoincrement())
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      Int
+    post        Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+    postId      Int
 psl=}
 
 entity Follows {=psl
@@ -244,4 +248,13 @@ action createVote {
   entities: [ChallengeVote]
 }
 
+action likePost {
+  fn: import { likePost } from "@server/posts/likePost.js",
+  entities: [Post, Like]
+}
+
+action removeLike {
+  fn: import { removeLike } from "@server/posts/removeLike.js",
+  entities: [Post, Like]
+}
 
