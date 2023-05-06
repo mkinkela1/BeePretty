@@ -2,6 +2,7 @@ import { useQuery } from "@wasp/queries";
 import getRandomChallenge from "@wasp/queries/getRandomChallenge";
 import createVote from "@wasp/actions/createVote";
 import { withPage } from "./components/withPage";
+import { toast } from "react-toastify";
 
 interface IResult {
   C_id: number;
@@ -30,8 +31,10 @@ const BattleAreaPage = () => {
     try {
       await createVote({ challengeId, voteForId });
       refetch();
+
+      toast.success("Vote registered");
     } catch {
-      console.error("Vote not registered");
+      toast.error("Vote not registered");
     }
   };
 

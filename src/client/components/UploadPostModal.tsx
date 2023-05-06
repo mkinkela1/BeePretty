@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import createPost from "@wasp/actions/createPost";
+import { toast } from "react-toastify";
 
 interface IProps {
   isOpen: boolean;
@@ -40,13 +41,16 @@ const InstagramModal: React.FC<IProps> = ({
           const data = await response.json();
           const { link } = data.data;
 
-          const post = await createPost({ imgUrl: link, title: caption });
-          console.log(post);
+          await createPost({ imgUrl: link, title: caption });
+
+          toast.success("Image successfully uploaded.");
         } else {
-          console.log("Image upload failed");
+          toast.error(
+            "Image upload failed. You can only import .JPG, .JPEG and .PNG"
+          );
         }
       } catch (error) {
-        console.error("Error uploading image:", error);
+        toast.error(`Error uploading image: ${error}`);
       } finally {
         dependencyReload();
         onClose();

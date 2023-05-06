@@ -17,6 +17,7 @@ import { isNotNullOrUndefined } from "@wasp/shared/helpers";
 import { PostModal } from "./components/PostModal";
 import { ChallengesList } from "./components/ChallengesList";
 import useAuth from "@wasp/auth/useAuth";
+import { toast } from "react-toastify";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -84,11 +85,15 @@ const ProfilePage = () => {
 
           if (isProfilePic) await uploadProfilePic({ profilePic: link });
           else await uploadFeaturedImage({ imageUrl: link });
+
+          toast.success("Image successfully uploaded.");
         } else {
-          console.log("Image upload failed");
+          toast.error(
+            "Image upload failed. You can only import .JPG, .JPEG and .PNG"
+          );
         }
       } catch (error) {
-        console.error("Error uploading image:", error);
+        toast.error(`Error uploading image: ${error}`);
       } finally {
         e.reset();
       }
@@ -102,8 +107,10 @@ const ProfilePage = () => {
         lastName: lastNameRef.current?.value,
         bio: bioRef.current?.value
       });
+
+      toast.success("User updated");
     } catch {
-      console.error("Could not update user");
+      toast.error("Could not update user");
     } finally {
       onClose();
     }

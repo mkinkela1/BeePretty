@@ -6,6 +6,8 @@ import { useQuery } from "@wasp/queries";
 import getMe from "@wasp/queries/getMe";
 import { isEmpty } from "@wasp/shared/helpers.js";
 import { Redirect } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.min.css";
+import { ToastContainer } from "react-toastify";
 
 interface IGetMe {
   userData: {
@@ -42,6 +44,18 @@ export const withPage = <P extends object>(
             <Component {...(props as P)} />
           </div>
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </SkeletonTheme>
     );
   };

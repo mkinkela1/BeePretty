@@ -28,7 +28,8 @@ app BeePretty {
         ("@heroicons/react", "^2.0.16"),
         ("form-data", "^4.0.0"),
         ("@faker-js/faker", "^7.6.0"),
-        ("react-loading-skeleton", "^3.0.0")
+        ("react-loading-skeleton", "^3.0.0"),
+        ("react-toastify", "^9.1.2")
     ]
 }
 

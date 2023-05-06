@@ -3,6 +3,7 @@ import Logo from "./assets/logo.svg";
 import { Redirect } from "react-router-dom";
 import { isNotEmpty } from "@wasp/shared/helpers";
 import uploadFeaturedImage from "@wasp/actions/uploadFeaturedImage";
+import { toast } from "react-toastify";
 
 const UploadFeaturedImagePage: React.FC = () => {
   const imageRef = useRef<HTMLInputElement>(null);
@@ -34,11 +35,15 @@ const UploadFeaturedImagePage: React.FC = () => {
           const { link } = data.data;
 
           await uploadFeaturedImage({ imageUrl: link });
+
+          toast.success("Image successfully uploaded.");
         } else {
-          console.log("Image upload failed");
+          toast.error(
+            "Image upload failed. You can only import .JPG, .JPEG and .PNG"
+          );
         }
       } catch (error) {
-        console.error("Error uploading image:", error);
+        toast.error(`Error uploading image: ${error}`);
       }
     }
 

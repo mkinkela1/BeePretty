@@ -15,6 +15,7 @@ import { isNotNullOrUndefined } from "@wasp/shared/helpers";
 import { PostModal } from "./components/PostModal";
 import { useState } from "react";
 import { ChallengesList } from "./components/ChallengesList";
+import { toast } from "react-toastify";
 
 interface IRouteParams {
   match: { params: { id: number } };
@@ -84,24 +85,27 @@ const UserProfilePage = ({
   const handleFollow = async () => {
     try {
       await followUser({ userId: +id });
+      toast.success("User followed");
     } catch {
-      console.error("Follow not successfull");
+      toast.error("Follow not successfull");
     }
   };
 
   const handleUnfollow = async () => {
     try {
       await unfollowUser({ userId: +id });
+      toast.success("User unfollowed");
     } catch {
-      console.error("Follow not successfull");
+      toast.error("Unfollow not successfull");
     }
   };
 
   const handleChallenge = async () => {
     try {
       await createChallenge({ userId: +id });
+      toast.success("User challenged");
     } catch {
-      console.error("User challenged");
+      toast.error("User challenge error");
     }
   };
   return isFetching ? (

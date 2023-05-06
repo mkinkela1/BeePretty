@@ -3,6 +3,7 @@ import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import likePost from "@wasp/actions/likePost";
 import removeLike from "@wasp/actions/removeLike";
+import { toast } from "react-toastify";
 
 interface IProps {
   id: number;
@@ -33,10 +34,15 @@ export const Post: React.FC<IProps> = ({
 
   const toggleLike = async () => {
     try {
-      if (likedByCurrentUser) await removeLike({ postId: id });
-      else await likePost({ postId: id });
+      if (likedByCurrentUser) {
+        await removeLike({ postId: id });
+        toast.success("Like removed");
+      } else {
+        await likePost({ postId: id });
+        toast.success("Post like");
+      }
     } catch {
-      console.error("Could not record action");
+      toast.error("Could not record action");
     }
   };
 
