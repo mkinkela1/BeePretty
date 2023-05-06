@@ -126,7 +126,7 @@ const SetupAccountPage: React.FC = () => {
             ref={imageRef}
             type="file"
             id="profilePicture"
-            accept="image/*"
+            accept="image/png, image/jpeg, image/jpg"
           />
           <button
             onClick={saveAndGoToNextStep}

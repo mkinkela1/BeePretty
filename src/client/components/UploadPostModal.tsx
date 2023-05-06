@@ -63,7 +63,12 @@ const InstagramModal: React.FC<IProps> = ({
               <h1 className="text-center text-2xl">Upload new post</h1>
             </header>
             <div className="flex flex-col p-4">
-              <input ref={imageRef} type="file" id="upload" accept="image/*" />
+              <input
+                ref={imageRef}
+                type="file"
+                id="upload"
+                accept="image/png, image/jpeg, image/jpg"
+              />
               <textarea
                 ref={captionRef}
                 className="border-gray-300 mt-2 resize-none rounded border p-2"

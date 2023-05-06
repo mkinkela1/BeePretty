@@ -71,7 +71,7 @@ const UploadFeaturedImagePage: React.FC = () => {
             ref={imageRef}
             type="file"
             id="featuredImage"
-            accept="image/*"
+            accept="image/png, image/jpeg, image/jpg"
           />
           <button
             onClick={saveAndGoToNextStep}
