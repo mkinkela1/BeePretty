@@ -1,9 +1,10 @@
-import { useQuery } from "@wasp/queries";
-import getPosts from "@wasp/queries/getPosts";
 import useAuth from "@wasp/auth/useAuth";
 import { Post } from "./components/Post";
 import { withPage } from "./components/withPage";
 import React from "react";
+import { PostSkeleton } from "./components/PostSkeleton";
+import { useQuery } from "@wasp/queries";
+import getPosts from "@wasp/queries/getPosts";
 
 interface IPost {
   id: number;
@@ -19,9 +20,11 @@ interface IPost {
 
 const AuthenticatedMainPage = () => {
   const { data: me } = useAuth();
-  const { data: posts } = useQuery<any, IPost[]>(getPosts);
+  const { data: posts, isLoading } = useQuery<any, IPost[]>(getPosts);
 
-  return (
+  return isLoading ? (
+    <PostSkeleton />
+  ) : (
     <>
       {posts?.map((post: IPost) => (
         <Post {...post} myId={me?.id ?? 0} />

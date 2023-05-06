@@ -10,6 +10,7 @@ import unfollowUser from "@wasp/actions/unfollowUser";
 import useAuth from "@wasp/auth/useAuth";
 import createChallenge from "@wasp/actions/createChallenge";
 import { withPage } from "./components/withPage";
+import { ProfileSkeleton } from "./components/ProfileSkeleton";
 
 interface IRouteParams {
   match: { params: { id: number } };
@@ -31,6 +32,11 @@ interface IResult {
   following: { followerId: number; followingId: number }[];
   followedBy: { followerId: number; followingId: number }[];
   challenger: { challengedById: number; challengerId: number }[];
+  posts: {
+    id: number;
+    title: string;
+    imgUrl: string;
+  }[];
 }
 
 const UserProfilePage = ({
@@ -39,11 +45,7 @@ const UserProfilePage = ({
   }
 }: IRouteParams) => {
   const { data: me } = useAuth();
-  const {
-    data: user,
-    isFetching,
-    error
-  } = useQuery<any, IResult>(getUserById, {
+  const { data: user, isFetching } = useQuery<any, IResult>(getUserById, {
     userId: +id
   });
 
@@ -91,8 +93,9 @@ const UserProfilePage = ({
       console.error("User challenged");
     }
   };
-
-  return (
+  return isFetching ? (
+    <ProfileSkeleton />
+  ) : (
     <>
       <div className="mx-auto max-w-screen-lg p-4">
         <header className="relative mb-4 flex">
@@ -163,17 +166,17 @@ const UserProfilePage = ({
           <img
             src={user?.featuredImage?.imageUrl}
             alt="featured image"
-            className="h-48 w-full rounded-lg border-4 border-primary object-cover"
+            className="aspect-square w-full rounded-lg border-4 border-primary object-cover"
           />
         )}
-        {/*{posts.map((post, index) => (*/}
-        {/*  <img*/}
-        {/*    key={index}*/}
-        {/*    src={post}*/}
-        {/*    alt={`Post ${index + 1}`}*/}
-        {/*    className="h-48 w-full rounded-lg object-cover"*/}
-        {/*  />*/}
-        {/*))}*/}
+        {user?.posts.map(({ id, imgUrl, title }) => (
+          <img
+            key={id}
+            src={imgUrl}
+            alt={title}
+            className="aspect-square w-full rounded-lg object-cover"
+          />
+        ))}
       </div>
     </>
   );

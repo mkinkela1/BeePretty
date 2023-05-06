@@ -18,7 +18,8 @@ export const getUserById = async ({ userId }: IArgs, context: any) => {
       featuredImage: true,
       following: true,
       followedBy: true,
-      challenger: true
+      challenger: true,
+      posts: true
     }
   });
 };

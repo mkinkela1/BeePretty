@@ -11,11 +11,12 @@ module.exports = {
       gray: {
         100: "#efefef",
         900: "#222"
-      }
+      },
+      red: "#f00"
     }
   },
   plugins: [
-    // require('@tailwindcss/typography'),
-    // require('@tailwindcss/forms'),
+    "@tailwindcss/typography",
+    "@tailwindcss/forms",
   ],
 }

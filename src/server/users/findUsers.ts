@@ -1,4 +1,4 @@
-import { isEmpty } from "../helpers.js";
+import { isEmpty } from "@wasp/shared/helpers.js";
 
 interface IArgs {
   search?: string;

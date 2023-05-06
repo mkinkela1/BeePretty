@@ -19,14 +19,16 @@ app BeePretty {
         google: {},
         usernameAndPassword: {}
       },
-      onAuthFailedRedirectTo: "/login"
+      onAuthFailedRedirectTo: "/login",
+      onAuthSucceededRedirectTo: "/app"
     },
     dependencies: [
         ("@tailwindcss/forms", "^0.5.3"),
         ("@tailwindcss/typography", "^0.5.7"),
         ("@heroicons/react", "^2.0.16"),
         ("form-data", "^4.0.0"),
-        ("@faker-js/faker", "^7.6.0")
+        ("@faker-js/faker", "^7.6.0"),
+        ("react-loading-skeleton", "^3.0.0")
     ]
 }
 
@@ -94,6 +96,24 @@ route UserProfileRoute { path: "/app/user/:id", to: UserProfilePage }
 page UserProfilePage {
   authRequired: true,
   component: import UserProfilePage from "@client/UserProfilePage.tsx"
+}
+
+route SetupAccountRoute { path: "/app/setup-account", to: SetupAccountPage }
+page SetupAccountPage {
+  authRequired: true,
+  component: import SetupAccountPage from "@client/SetupAccountPage.tsx"
+}
+
+route UploadFeaturedImageRoute { path: "/app/upload-featured-image", to: UploadFeaturedImagePage }
+page UploadFeaturedImagePage {
+  authRequired: true,
+  component: import UploadFeaturedImagePage from "@client/UploadFeaturedImagePage.tsx"
+}
+
+route FinishSetupRoute { path: "/app/finish-setup", to: FinishSetupPage }
+page FinishSetupPage {
+  authRequired: true,
+  component: import FinishSetupPage from "@client/FinishSetupPage.tsx"
 }
 
 entity User {=psl
@@ -256,5 +276,10 @@ action likePost {
 action removeLike {
   fn: import { removeLike } from "@server/posts/removeLike.js",
   entities: [Post, Like]
+}
+
+action updateUser {
+  fn: import { updateUser } from "@server/users/updateUser.js",
+  entities: [UserData]
 }
 

@@ -4,6 +4,8 @@ import findUsers from "@wasp/queries/findUsers";
 import useAuth from "@wasp/auth/useAuth";
 import useDebounce from "./hooks/useDebounce";
 import { withPage } from "./components/withPage";
+import { SearchResultSkeleton } from "./components/SearchResultSkeleton";
+import { SearchResult } from "./components/SearchResult";
 
 interface IResult {
   userId: number;
@@ -24,18 +26,11 @@ const SearchPage = () => {
 
   const id = user?.id;
 
-  const {
-    data: usersData,
-    isFetching,
-    error
-  } = useQuery<any, IResult[]>(findUsers, {
+  const { data: usersData, isFetching } = useQuery<any, IResult[]>(findUsers, {
     search: debouncedSearch
   });
 
   const usersList = usersData ?? [];
-
-  const getFullName = (firstName?: string, lastName?: string) =>
-    `${firstName ?? "John"} ${lastName ?? "Doe"}`;
 
   return (
     <>
@@ -48,7 +43,9 @@ const SearchPage = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      {usersList.length > 0 ? (
+      {isFetching ? (
+        <SearchResultSkeleton />
+      ) : usersList.length > 0 ? (
         <ul className="flex flex-col gap-2">
           {usersList.map(
             ({
@@ -59,40 +56,16 @@ const SearchPage = () => {
               bio,
               user: { following, followedBy }
             }) => (
-              <li key={userId} className="rounded-lg bg-white p-4 shadow-md">
-                <a href={userId === id ? "/app/me" : `/app/user/${userId}`}>
-                  <div className="relative flex">
-                    <div>
-                      <img
-                        src={
-                          profilePic ?? "https://via.placeholder.com/300x300"
-                        }
-                        alt="Profile"
-                        className="mr-4 h-20 w-20 rounded-full"
-                      />
-                    </div>
-                    <div>
-                      <h1 className="text-2xl font-bold">
-                        {getFullName(firstName, lastName)}
-                      </h1>
-                      <p className="text-gray-600">{bio}</p>
-                      <div className="flex gap-2">
-                        <div>
-                          <strong>Posts: </strong> {0}
-                        </div>
-                        <div>
-                          <strong>Following: </strong>
-                          {following?.length ?? 0}
-                        </div>
-                        <div>
-                          <strong>Followers: </strong>
-                          {followedBy?.length ?? 0}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </li>
+              <SearchResult
+                profilePic={profilePic}
+                myId={id}
+                following={following}
+                followedBy={followedBy}
+                bio={bio}
+                userId={userId}
+                firstName={firstName}
+                lastName={lastName}
+              />
             )
           )}
         </ul>

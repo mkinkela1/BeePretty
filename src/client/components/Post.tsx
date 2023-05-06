@@ -53,7 +53,7 @@ export const Post: React.FC<IProps> = ({
           <img
             src={profilePic ?? "https://via.placeholder.com/40"}
             alt="Profile"
-            className="mr-3 h-10 w-10 rounded-full"
+            className="mr-3 aspect-square h-10 w-10 rounded-full"
           />
           <span className="font-semibold text-gray-900">{getFullName()}</span>
         </a>
@@ -61,7 +61,7 @@ export const Post: React.FC<IProps> = ({
       <img
         src={imgUrl ?? "https://via.placeholder.com/500x500"}
         alt="Post"
-        className="mb-3 w-full rounded-md"
+        className="mb-3 aspect-square w-full rounded-md"
       />
       <div className="flex items-center space-x-4">
         <button
@@ -80,8 +80,7 @@ export const Post: React.FC<IProps> = ({
         <span className="ml-1 text-gray-900">{numberOfLikes.toString()}</span>
       </div>
       <div className="mt-2">
-        <span className="font-semibold text-gray-900">Caption:</span>
-        <span className="text-gray-700 ml-1">{title}</span>
+        <span className="text-gray-700">{title}</span>
       </div>
     </div>
   );

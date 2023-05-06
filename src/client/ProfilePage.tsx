@@ -6,6 +6,7 @@ import uploadFeaturedImage from "@wasp/actions/uploadFeaturedImage";
 import { useState } from "react";
 import UploadPostModal from "./components/UploadPostModal";
 import { withPage } from "./components/withPage";
+import { ProfileSkeleton } from "./components/ProfileSkeleton";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -27,12 +28,7 @@ interface IGetMe {
 }
 
 const ProfilePage = () => {
-  const {
-    data: user,
-    isFetching,
-    error,
-    refetch
-  } = useQuery<any, IGetMe>(getMe);
+  const { data: user, isLoading, refetch } = useQuery<any, IGetMe>(getMe);
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const getFullName = () =>
@@ -77,7 +73,9 @@ const ProfilePage = () => {
     }
   };
 
-  return (
+  return isLoading ? (
+    <ProfileSkeleton />
+  ) : (
     <>
       <div className="mx-auto max-w-screen-lg p-4">
         <header className="relative mb-4 flex">
@@ -151,7 +149,7 @@ const ProfilePage = () => {
             <img
               src={user?.featuredImage?.imageUrl}
               alt="featured image"
-              className="h-48 w-full rounded-lg border-4 border-primary object-cover"
+              className="aspect-square w-full rounded-lg border-4 border-primary object-cover"
             />
           )}
           {user?.posts.map(({ id, imgUrl, title }) => (
@@ -159,7 +157,7 @@ const ProfilePage = () => {
               key={id}
               src={imgUrl}
               alt={title}
-              className="h-48 w-full rounded-lg object-cover"
+              className="aspect-square w-full rounded-lg object-cover"
             />
           ))}
         </div>
