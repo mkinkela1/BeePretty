@@ -1,6 +1,7 @@
 import { useQuery } from "@wasp/queries";
 import getMe from "@wasp/queries/getMe";
 import {
+  ArrowLeftOnRectangleIcon,
   PencilSquareIcon,
   PhotoIcon,
   PlusIcon,
@@ -18,6 +19,8 @@ import { PostModal } from "./components/PostModal";
 import { ChallengesList } from "./components/ChallengesList";
 import useAuth from "@wasp/auth/useAuth";
 import { toast } from "react-toastify";
+import logout from "@wasp/auth/logout.js";
+import { useHistory } from "react-router-dom";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -44,6 +47,7 @@ enum ActiveTab {
 }
 
 const ProfilePage = () => {
+  const history = useHistory();
   const { data: me } = useAuth();
   const { data: user, isLoading, refetch } = useQuery<any, IGetMe>(getMe);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -259,6 +263,16 @@ const ProfilePage = () => {
               >
                 <PhotoIcon className="h-5 w-5" />
                 <span>New post</span>
+              </div>
+              <div
+                onClick={() => {
+                  logout();
+                  history.push("/");
+                }}
+                className="text-black flex items-center justify-center space-x-2 rounded-md bg-primary px-4 py-2 focus:outline-none"
+              >
+                <ArrowLeftOnRectangleIcon className="h-5 w-5" />
+                <span>Logout</span>
               </div>
             </div>
           </div>

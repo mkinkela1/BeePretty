@@ -48,21 +48,6 @@ page SignupPage {
   component: import SignUp from "@client/SignupPage.tsx"
 }
 
-route ForgotPasswordRoute { path: "/forgot-password", to: ForgotPasswordPage }
-page ForgotPasswordPage {
-  component: import ForgotPassword from "@client/ForgotPasswordPage.tsx"
-}
-
-route ResetPasswordRoute { path: "/reset-password", to: ResetPasswordPage }
-page ResetPasswordPage {
-  component: import ResetPassword from "@client/ResetPasswordPage.tsx"
-}
-
-route VerifyEmailRoute { path: "/verify-email", to: VerifyEmailPage }
-page VerifyEmailPage {
-  component: import VerifyEmail from "@client/VerifyEmailPage.tsx"
-}
-
 route AuthenticatedMainRoute { path: "/app", to: AuthenticatedMainPage }
 page AuthenticatedMainPage {
   authRequired: true,
