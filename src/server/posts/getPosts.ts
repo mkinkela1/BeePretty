@@ -28,24 +28,3 @@ export const getPosts = async (args: any, context: any) => {
       ORDER BY P."id" DESC
   `;
 };
-
-// SELECT P."id",
-//   P."imgUrl",
-//   P."title",
-//   UD."firstName",
-//   UD."lastName",
-//   UD."profilePic",
-//   P."userId",
-//   count(L."id")                                                  as "numberOfLikes",
-//   FROM "Post" P
-// JOIN "User" U on U.id = p."userId"
-// JOIN "UserData" UD on U.id = UD."userId"
-// LEFT JOIN "Like" L on P."id" = L."postId"
-// WHERE P."userId" IN (SELECT "followingId"
-// FROM "Follows"
-// WHERE "followerId" = ${context.user.id})
-// OR P."userId" = ${context.user.id}
-//   GROUP BY P."id", P."imgUrl", P."title", UD."firstName", UD."lastName", UD."profilePic", P."userId"
-// ORDER BY P."id" DESC
-
-// (SELECT count(*) FROM L WHERE L."userId" = ${context.user.id}) as "myLike"

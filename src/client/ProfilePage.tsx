@@ -13,6 +13,8 @@ import UploadPostModal from "./components/UploadPostModal";
 import { withPage } from "./components/withPage";
 import { ProfileSkeleton } from "./components/ProfileSkeleton";
 import updateUser from "@wasp/actions/updateUser";
+import { isNotNullOrUndefined } from "@wasp/shared/helpers";
+import { PostModal } from "./components/PostModal";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -36,6 +38,7 @@ interface IGetMe {
 const ProfilePage = () => {
   const { data: user, isLoading, refetch } = useQuery<any, IGetMe>(getMe);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [postModal, setPostModal] = useState<number | null>(null);
   const [updateUserData, setUpdateUserData] = useState<boolean>(false);
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
@@ -258,6 +261,7 @@ const ProfilePage = () => {
               src={imgUrl}
               alt={title}
               className="aspect-square w-full rounded-lg object-cover"
+              onClick={() => setPostModal(id)}
             />
           ))}
         </div>
@@ -267,6 +271,9 @@ const ProfilePage = () => {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
       />
+      {isNotNullOrUndefined(postModal) && (
+        <PostModal postId={postModal!} onClose={() => setPostModal(null)} />
+      )}
     </>
   );
 };

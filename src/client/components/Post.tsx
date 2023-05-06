@@ -43,7 +43,7 @@ export const Post: React.FC<IProps> = ({
   return (
     <div
       key={id}
-      className="mx-auto mb-4 max-w-screen-lg rounded-md bg-white p-4 shadow-md"
+      className="mx-auto mb-4 max-w-screen-lg rounded-md bg-white p-4"
     >
       <div className="mb-2 flex items-center justify-between">
         <a

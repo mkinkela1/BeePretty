@@ -228,6 +228,11 @@ query getPosts {
   entities: [User, Follows, Post]
 }
 
+query getPost {
+  fn: import { getPost } from "@server/posts/getPost.js",
+  entities: [User, UserData, Post, Like]
+}
+
 query getRandomChallenge {
   fn: import { getRandomChallenge } from "@server/challenges/getRandomChallenge.js",
   entities: [User, FeaturedImage, Challenge]

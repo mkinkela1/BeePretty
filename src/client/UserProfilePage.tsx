@@ -11,6 +11,9 @@ import useAuth from "@wasp/auth/useAuth";
 import createChallenge from "@wasp/actions/createChallenge";
 import { withPage } from "./components/withPage";
 import { ProfileSkeleton } from "./components/ProfileSkeleton";
+import { isNotNullOrUndefined } from "@wasp/shared/helpers";
+import { PostModal } from "./components/PostModal";
+import { useState } from "react";
 
 interface IRouteParams {
   match: { params: { id: number } };
@@ -48,6 +51,7 @@ const UserProfilePage = ({
   const { data: user, isFetching } = useQuery<any, IResult>(getUserById, {
     userId: +id
   });
+  const [postModal, setPostModal] = useState<number | null>(null);
 
   const getFullName = () =>
     `${user?.userData?.firstName ?? "John"} ${
@@ -175,9 +179,13 @@ const UserProfilePage = ({
             src={imgUrl}
             alt={title}
             className="aspect-square w-full rounded-lg object-cover"
+            onClick={() => setPostModal(id)}
           />
         ))}
       </div>
+      {isNotNullOrUndefined(postModal) && (
+        <PostModal postId={postModal!} onClose={() => setPostModal(null)} />
+      )}
     </>
   );
 };
