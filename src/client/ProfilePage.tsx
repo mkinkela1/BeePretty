@@ -15,6 +15,8 @@ import { ProfileSkeleton } from "./components/ProfileSkeleton";
 import updateUser from "@wasp/actions/updateUser";
 import { isNotNullOrUndefined } from "@wasp/shared/helpers";
 import { PostModal } from "./components/PostModal";
+import { ChallengesList } from "./components/ChallengesList";
+import useAuth from "@wasp/auth/useAuth";
 
 interface IGetMe {
   featuredImage: { imageUrl: string };
@@ -35,7 +37,13 @@ interface IGetMe {
   }[];
 }
 
+enum ActiveTab {
+  POSTS = "POSTS",
+  CHALLENGES = "CHALLENGES"
+}
+
 const ProfilePage = () => {
+  const { data: me } = useAuth();
   const { data: user, isLoading, refetch } = useQuery<any, IGetMe>(getMe);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [postModal, setPostModal] = useState<number | null>(null);
@@ -43,6 +51,7 @@ const ProfilePage = () => {
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
   const bioRef = useRef<HTMLTextAreaElement>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.POSTS);
 
   const getFullName = () =>
     `${user?.userData?.firstName ?? "John"} ${
@@ -247,24 +256,50 @@ const ProfilePage = () => {
             </div>
           </div>
         </header>
-        <div className="grid grid-cols-3 gap-4">
-          {user?.featuredImage?.imageUrl && (
-            <img
-              src={user?.featuredImage?.imageUrl}
-              alt="featured image"
-              className="aspect-square w-full rounded-lg border-4 border-primary object-cover"
-            />
-          )}
-          {user?.posts.map(({ id, imgUrl, title }) => (
-            <img
-              key={id}
-              src={imgUrl}
-              alt={title}
-              className="aspect-square w-full rounded-lg object-cover"
-              onClick={() => setPostModal(id)}
-            />
-          ))}
+
+        <div className="mb-4 text-center text-sm font-medium text-gray-900">
+          <ul className="-mb-px flex flex-wrap">
+            <li
+              className={`${
+                activeTab === ActiveTab.POSTS ? "border-b-4" : ""
+              } mr-2 flex-1 border-b border-b-primary`}
+              onClick={() => setActiveTab(ActiveTab.POSTS)}
+            >
+              <div className="inline-block p-4">Posts</div>
+            </li>
+            <li
+              className={`${
+                activeTab === ActiveTab.CHALLENGES ? "border-b-4" : ""
+              } mr-2 flex-1 border-b border-b-primary`}
+              onClick={() => setActiveTab(ActiveTab.CHALLENGES)}
+            >
+              <div className="inline-block p-4">Challenges</div>
+            </li>
+          </ul>
         </div>
+
+        {activeTab === ActiveTab.POSTS ? (
+          <div className="grid grid-cols-3 gap-4">
+            {user?.featuredImage?.imageUrl && (
+              <img
+                src={user?.featuredImage?.imageUrl}
+                alt="featured image"
+                className="aspect-square w-full rounded-lg border-4 border-primary object-cover"
+              />
+            )}
+            {user?.posts.map(({ id, imgUrl, title }) => (
+              <img
+                key={id}
+                src={imgUrl}
+                alt={title}
+                className="aspect-square w-full rounded-lg object-cover"
+                onClick={() => setPostModal(id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <ChallengesList userId={me?.id ?? 0} />
+        )}
       </div>
       <UploadPostModal
         dependencyReload={refetch}

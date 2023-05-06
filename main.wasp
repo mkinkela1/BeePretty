@@ -238,6 +238,11 @@ query getRandomChallenge {
   entities: [User, FeaturedImage, Challenge]
 }
 
+query getUsersChallenges {
+  fn: import { getUsersChallenges } from "@server/challenges/getUsersChallenges.js",
+  entities: [ChallengeVote, Challenge, User, UserData]
+}
+
 action uploadProfilePic {
   fn: import { uploadProfilePic } from "@server/users/uploadProfilePic.js",
   entities: [UserData]
