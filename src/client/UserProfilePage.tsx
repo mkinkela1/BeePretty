@@ -114,7 +114,7 @@ const UserProfilePage = ({
             <p className="text-gray-600">{user?.userData?.bio}</p>
             <div className="flex gap-2">
               <div>
-                <strong>Posts: </strong> {0}
+                <strong>Posts: </strong> {user?.posts?.length ?? 0}
               </div>
               <div>
                 <strong>Following: </strong>

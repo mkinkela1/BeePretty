@@ -16,6 +16,7 @@ interface IResult {
   user: {
     following: { followerId: number; followingId: number }[];
     followedBy: { followerId: number; followingId: number }[];
+    posts: any[];
   };
 }
 
@@ -54,7 +55,7 @@ const SearchPage = () => {
               profilePic,
               userId,
               bio,
-              user: { following, followedBy }
+              user: { following, followedBy, posts }
             }) => (
               <SearchResult
                 profilePic={profilePic}
@@ -65,6 +66,7 @@ const SearchPage = () => {
                 userId={userId}
                 firstName={firstName}
                 lastName={lastName}
+                posts={posts}
               />
             )
           )}

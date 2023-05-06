@@ -28,7 +28,8 @@ export const findUsers = async ({ search }: IArgs, context: any) => {
         select: {
           id: true,
           following: true,
-          followedBy: true
+          followedBy: true,
+          posts: true
         }
       }
     }

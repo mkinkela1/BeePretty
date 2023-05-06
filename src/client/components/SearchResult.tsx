@@ -9,6 +9,7 @@ interface IProps {
   bio: string;
   following: any[];
   followedBy: any[];
+  posts: any[];
 }
 
 export const SearchResult: React.FC<IProps> = ({
@@ -19,7 +20,8 @@ export const SearchResult: React.FC<IProps> = ({
   lastName,
   bio,
   following,
-  followedBy
+  followedBy,
+  posts
 }) => {
   const getFullName = (firstName?: string, lastName?: string) =>
     `${firstName ?? "John"} ${lastName ?? "Doe"}`;
@@ -42,7 +44,7 @@ export const SearchResult: React.FC<IProps> = ({
             <p className="text-gray-600">{bio}</p>
             <div className="flex gap-2">
               <div>
-                <strong>Posts: </strong> {0}
+                <strong>Posts: </strong> {posts?.length ?? 0}
               </div>
               <div>
                 <strong>Following: </strong>
