@@ -20,7 +20,9 @@ interface IPost {
 
 const AuthenticatedMainPage = () => {
   const { data: me } = useAuth();
-  const { data: posts, isLoading } = useQuery<any, IPost[]>(getPosts);
+  const { data, isLoading } = useQuery(getPosts);
+
+  const posts: IPost[] = data as IPost[];
 
   return isLoading ? (
     <PostSkeleton />

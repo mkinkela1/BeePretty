@@ -23,9 +23,11 @@ const BattleAreaPage = () => {
     isFetching,
     error,
     refetch
-  } = useQuery<any, IResult[]>(getRandomChallenge);
+  } = useQuery(getRandomChallenge);
 
-  const challenge = challengeData?.[0];
+  const challenges: IResult[] = (challengeData ?? []) as IResult[];
+
+  const challenge = challenges?.[0];
 
   const handleVote = async ({ challengeId, voteForId }: IVote) => {
     try {

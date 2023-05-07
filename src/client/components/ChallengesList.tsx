@@ -21,17 +21,14 @@ interface IProps {
 }
 
 export const ChallengesList: React.FC<IProps> = ({ userId }) => {
-  const { data: challenges, isLoading } = useQuery<any, IChallenge[]>(
-    getUsersChallenges,
-    {
-      userId
-    }
-  );
+  const { data: challenges, isLoading } = useQuery(getUsersChallenges, {
+    userId
+  });
   return isLoading ? (
     <Skeleton count={3} height="5rem" />
   ) : (
     <>
-      {challenges?.map((challenge: IChallenge) => (
+      {(challenges as IChallenge[])?.map((challenge: IChallenge) => (
         <Challenge {...challenge} userId={userId} />
       ))}
     </>

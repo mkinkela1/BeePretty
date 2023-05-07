@@ -27,11 +27,11 @@ const SearchPage = () => {
 
   const id = user?.id;
 
-  const { data: usersData, isFetching } = useQuery<any, IResult[]>(findUsers, {
+  const { data: usersData, isFetching } = useQuery(findUsers, {
     search: debouncedSearch
   });
 
-  const usersList = usersData ?? [];
+  const usersList: IResult[] = usersData ?? [];
 
   return (
     <>
