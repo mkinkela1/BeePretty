@@ -1,5 +1,4 @@
 import {
-  HeartIcon,
   MagnifyingGlassIcon,
   TrophyIcon,
   UserCircleIcon
@@ -36,14 +35,6 @@ const TopMenu = () => {
               } hover:bg-gray-200 text-gray-700 rounded-full bg-white px-4 py-2 focus:outline-none`}
             >
               <MagnifyingGlassIcon className="h-6 w-6" />
-            </Link>
-            <Link
-              to="/app/notification"
-              className={`${
-                location == "notification" ? "text-primary" : ""
-              } hover:bg-gray-200 text-gray-700 rounded-full bg-white px-4 py-2 focus:outline-none`}
-            >
-              <HeartIcon className="h-6 w-6" />
             </Link>
             <Link
               to="/app/me"

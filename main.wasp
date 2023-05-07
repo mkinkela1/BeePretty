@@ -66,12 +66,6 @@ page SearchPage {
   component: import SearchPage from "@client/SearchPage.tsx"
 }
 
-route NotificationRoute { path: "/app/notification", to: NotificationPage }
-page NotificationPage {
-  authRequired: true,
-  component: import Notification from "@client/NotificationPage.tsx"
-}
-
 route ProfileRoute { path: "/app/me", to: ProfilePage }
 page ProfilePage {
   authRequired: true,
