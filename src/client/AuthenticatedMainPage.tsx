@@ -5,6 +5,7 @@ import React from "react";
 import { PostSkeleton } from "./components/PostSkeleton";
 import { useQuery } from "@wasp/queries";
 import getPosts from "@wasp/queries/getPosts";
+import { isNotEmpty } from "@wasp/shared/helpers";
 
 interface IPost {
   id: number;
@@ -28,9 +29,9 @@ const AuthenticatedMainPage = () => {
     <PostSkeleton />
   ) : (
     <>
-      {posts?.map((post: IPost) => (
-        <Post {...post} myId={me?.id ?? 0} />
-      ))}
+      {isNotEmpty(posts)
+        ? posts?.map((post: IPost) => <Post {...post} myId={me?.id ?? 0} />)
+        : "Start following other users and posts will appear here."}
     </>
   );
 };

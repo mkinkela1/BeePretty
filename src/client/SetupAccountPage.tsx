@@ -4,7 +4,6 @@ import uploadProfilePic from "@wasp/actions/uploadProfilePic";
 import updateUser from "@wasp/actions/updateUser";
 import { Redirect } from "react-router-dom";
 import { isNotEmpty } from "@wasp/shared/helpers";
-import { toast } from "react-toastify";
 
 const SetupAccountPage: React.FC = () => {
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -44,15 +43,13 @@ const SetupAccountPage: React.FC = () => {
           profilePic = link;
 
           await uploadProfilePic({ profilePic });
-
-          toast.success("Image successfully uploaded.");
         } else {
-          toast.error(
+          console.error(
             "Image upload failed. You can only import .JPG, .JPEG and .PNG"
           );
         }
       } catch (error) {
-        toast.error(`Error uploading image: ${error}`);
+        console.error(`Error uploading image: ${error}`);
       }
     }
 
@@ -60,11 +57,11 @@ const SetupAccountPage: React.FC = () => {
       // @ts-ignore
       await updateUser({ firstName, lastName, bio, profilePic });
 
-      toast.success("User data added");
+      console.log("User data added");
 
       goToNextStep();
     } catch {
-      toast.error("Error adding user data");
+      console.error("Error adding user data");
     }
 
     setIsUploaded(true);

@@ -4,8 +4,10 @@ import { Redirect } from "react-router-dom";
 
 const FinishSetupPage: React.FC = () => {
   const [canGoNext, setCanGoNext] = useState<boolean>(false);
+  if (canGoNext) {
+    return <Redirect to="/app" />;
+  }
 
-  if (canGoNext) return <Redirect to="/app" />;
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="mx-auto max-w-screen-md p-4">

@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopMenu from "./TopMenu";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { useQuery } from "@wasp/queries";
 import getMe from "@wasp/queries/getMe";
 import { isEmpty } from "@wasp/shared/helpers.js";
 import { Redirect } from "react-router-dom";
@@ -10,28 +9,30 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer } from "react-toastify";
 
 interface IGetMe {
-  userData: {
-    bio: string;
-    firstName: string;
-    id: number;
-    lastName: string;
-    userId: number;
-    profilePic: string;
-  };
+  bio: string;
+  firstName: string;
+  id: number;
+  lastName: string;
+  userId: number;
+  profilePic: string;
 }
 
 export const withPage = <P extends object>(
   Component: React.ComponentType<P>
 ) => {
   const WrapperComponent = (props: P) => {
-    const { data: user, isLoading } = useQuery<any, IGetMe>(getMe);
+    const [user, setUser] = useState<IGetMe | null>(null);
+    const [loaded, setLoaded] = useState<boolean>(false);
 
-    if (isLoading) return <></>;
-    else {
-      const {
-        userData: { firstName, lastName }
-      } = user || { userData: {} };
-      if (isEmpty(firstName) || isEmpty(lastName)) {
+    useEffect(() => {
+      getMe([], {}).then((data) => {
+        setUser(data.userData);
+        setLoaded(true);
+      });
+    }, []);
+
+    if (loaded) {
+      if (isEmpty(user?.firstName) || isEmpty(user?.lastName)) {
         return <Redirect to="/app/setup-account" />;
       }
     }
